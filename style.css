@@ -1,0 +1,840 @@
+/* =========================================================
+   WGA DESENVOLVIMENTO — DESIGN TOKENS
+   Paleta baseada na logo: preto profundo, dourado champagne
+   e o cinza da fita, com um âmbar quente para os CTAs.
+   Para trocar as cores do site inteiro, mexa só aqui.
+   ========================================================= */
+:root {
+  --bg: #0a0a0b;
+  --bg-alt: #121113;
+  --bg-card: #17161a;
+  --line: rgba(216, 196, 160, 0.14);
+
+  --gold: #d8c4a0;
+  --gold-bright: #f1e3c6;
+  --grey-ribbon: #8b8b8d;
+  --amber: #c98b4a;
+  --amber-bright: #e0a868;
+
+  --text: #ede9e2;
+  --text-muted: #a39d93;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --radius: 14px;
+  --container: 1120px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--amber);
+  color: #0a0a0b;
+}
+
+:focus-visible {
+  outline: 2px solid var(--amber-bright);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   FITA — elemento assinatura
+   Um traço contínuo em SVG que atravessa o site inteiro,
+   ecoando a fita entrelaçada da logo. Fixo no fundo,
+   sutil, nunca compete com o conteúdo.
+   ========================================================= */
+.thread {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.thread-path {
+  fill: none;
+  stroke: url(#thread-gradient);
+  stroke-width: 0.4;
+  vector-effect: non-scaling-stroke;
+}
+
+/* fallback gradient defined via JS-inserted defs; simple stroke color fallback */
+.thread-path {
+  stroke: var(--grey-ribbon);
+}
+
+/* =========================================================
+   NAV
+   ========================================================= */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: grid;
+  margin: 0 12px;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  margin-right: 12px;
+  background: rgba(10, 10, 11, 0.75);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-brand {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.nav-logo {
+  padding: 12px;
+  width: 290px;
+}
+
+.nav-brand-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
+}
+
+.nav-brand-text b {
+  color: var(--amber-bright);
+}
+
+.nav-links {
+  height: 45;
+  padding: 18px clamp(20px, 5vw, 64px);
+  display: none;
+  align-items: center;
+  gap: 32px;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+
+.nav-links a:hover {
+  color: var(--gold-bright);
+}
+
+.nav-cta {
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: var(--amber);
+  color: #17110a;
+  font-weight: 600;
+}
+
+.nav-cta:hover {
+  background: var(--amber-bright);
+  color: #17110a;
+}
+
+.nav-burger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 34px;
+  height: 34px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-burger span {
+  display: block;
+  height: 2px;
+  background: var(--gold-bright);
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.nav-burger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-burger.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-burger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-links.open {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding: 24px clamp(20px, 5vw, 64px) 32px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--line);
+}
+
+@media (min-width: 900px) {
+  .nav-links {
+    display: flex;
+  }
+
+  .nav-burger {
+    display: none;
+  }
+}
+
+/* =========================================================
+   LAYOUT HELPERS
+   ========================================================= */
+.section {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: clamp(64px, 10vw, 120px) clamp(20px, 5vw, 64px);
+}
+
+.section-alt {
+  background: var(--bg-alt);
+  max-width: 100%;
+}
+
+.section-alt>* {
+  max-width: var(--container);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--amber-bright);
+  text-transform: lowercase;
+  margin-bottom: 14px;
+}
+
+.center {
+  text-align: center;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  color: var(--gold-bright);
+  max-width: 640px;
+  margin-bottom: 16px;
+}
+
+.section-title.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-sub {
+  color: var(--text-muted);
+  max-width: 560px;
+  font-size: 1.02rem;
+  margin-bottom: 48px;
+}
+
+.section-sub.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--amber-bright), var(--amber));
+  color: #17110a;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  border: 1px solid var(--line);
+  color: var(--gold-bright);
+}
+
+.btn-ghost:hover {
+  border-color: var(--gold);
+  background: rgba(216, 196, 160, 0.06);
+}
+
+.btn-lg {
+  padding: 17px 36px;
+  font-size: 1.05rem;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  padding: 120px clamp(20px, 6vw, 64px) 60px;
+}
+
+.hero-inner {
+  max-width: 760px;
+}
+
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 7vw, 4.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+
+.text-gold {
+  background: linear-gradient(135deg, var(--gold-bright), var(--amber-bright));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-sub {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 520px;
+  margin-bottom: 36px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 64px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: clamp(24px, 5vw, 56px);
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gold-bright);
+}
+
+.stat-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* =========================================================
+   CARDS — diferenciais
+   ========================================================= */
+.cards-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 760px) {
+  .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 32px 26px;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.card:hover {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+}
+
+.card-icon {
+  font-size: 1.8rem;
+  margin-bottom: 18px;
+}
+
+.card h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--gold-bright);
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: var(--text-muted);
+  font-size: 0.96rem;
+}
+
+/* =========================================================
+   PROCESSO
+   ========================================================= */
+.process-list {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.process-step {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.process-num {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  color: var(--amber-bright);
+  min-width: 44px;
+}
+
+.process-step h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--gold-bright);
+  margin-bottom: 6px;
+}
+
+.process-step p {
+  color: var(--text-muted);
+  font-size: 0.96rem;
+}
+
+/* =========================================================
+   PROJETOS
+   ========================================================= */
+.projects-grid {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 760px) {
+  .projects-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold);
+}
+
+.project-thumb {
+  height: 180px;
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
+}
+
+.project-tag {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--gold-bright);
+  background: rgba(10, 10, 11, 0.55);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+
+.project-body {
+  padding: 24px;
+}
+
+.project-body h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--gold-bright);
+  margin-bottom: 8px;
+}
+
+.project-body p {
+  color: var(--text-muted);
+  font-size: 0.93rem;
+  margin-bottom: 16px;
+}
+
+.project-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--amber-bright);
+}
+
+.project-link:hover {
+  text-decoration: underline;
+}
+
+.julia-berto-nails{
+  background-image: url("img/julia-berto-nails.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.berto-piercing{
+  background-image: url("img/berto-piercing.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.project-card-cta {
+  background: transparent;
+  border: 1.5px dashed var(--gold);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+}
+.project-card-cta:hover {
+  border-color: var(--amber-bright);
+  background: rgba(216, 196, 160, 0.04);
+}
+
+.project-cta-icon {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--amber);
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px dashed var(--amber);
+  margin: 28px auto 0;
+}
+
+.project-cta-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--grey-ribbon);
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+
+.project-card-cta h3 {
+  font-size: 1.4rem;
+  letter-spacing: 0.03em;
+}
+
+.project-link-cta {
+  color: var(--gold-bright);
+  border-bottom: 1px solid var(--amber);
+  padding-bottom: 2px;
+}
+.project-link-cta:hover { color: var(--amber-bright); text-decoration: none; }
+/* =========================================================
+   DEPOIMENTOS
+   ========================================================= */
+.testimonials-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 760px) {
+  .testimonials-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.testimonial {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius);
+  padding: 28px;
+}
+
+.testimonial p {
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.testimonial cite {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: normal;
+}
+
+.testimonial-cta {
+  background: transparent;
+  border: 1.5px dashed var(--gold);
+  border-left: 1.5px dashed var(--gold);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+}
+.testimonial-cta:hover {
+  border-color: var(--amber-bright);
+  background: rgba(216, 196, 160, 0.04);
+}
+.testimonial-cta-text {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-size: 1.1rem;
+  color: var(--gold-bright);
+}
+/* =========================================================
+   TIME
+   ========================================================= */
+.team-grid {
+  display: grid;
+  gap: 28px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 760px) {
+  .team-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.team-card {
+  text-align: center;
+}
+
+.team-photo-anderson {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  background-image: url("img/anderson.png");
+  background-size: cover;
+  border: 1px solid var(--gold);
+}
+
+.team-photo-guilherme {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  background-image: url("img/guilherme.png");
+  background-size: cover;
+  border: 1px solid var(--gold);
+}
+
+.team-photo-wellington {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  background-image: url("img/wellington.png");
+  background-size: cover;
+  border: 1px solid var(--gold);
+}
+
+.team-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--gold-bright);
+}
+
+.team-role {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--amber-bright);
+  margin: 6px 0 12px;
+}
+
+.team-bio {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+}
+
+/* =========================================================
+   CTA CONTATO
+   ========================================================= */
+.cta-contact {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: clamp(80px, 12vw, 140px) 24px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(216, 196, 160, 0.08), transparent 60%), var(--bg-alt);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.cta-logo {
+  width:60%;
+  height: 60%;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  opacity: 0.9;
+}
+
+.cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  color: var(--gold-bright);
+  margin-bottom: 14px;
+}
+
+.cta-sub {
+  color: var(--text-muted);
+  max-width: 440px;
+  margin: 0 auto 32px;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.footer {
+  position: relative;
+  z-index: 1;
+  padding: 48px clamp(20px, 5vw, 64px) 32px;
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: var(--container);
+  margin: 0 auto 32px;
+}
+
+@media (min-width: 700px) {
+  .footer-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.footer-name {
+  font-family: var(--font-display);
+  color: var(--gold-bright);
+  font-weight: 600;
+}
+
+.footer-tag {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.footer-links a:hover {
+  color: var(--amber-bright);
+}
+
+.footer-copy {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  max-width: var(--container);
+  margin: 0 auto;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
